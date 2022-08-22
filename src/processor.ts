@@ -22,13 +22,13 @@ import * as erc721 from "./abi/erc721";
 const database = new TypeormDatabase();
 const processor = new SubstrateBatchProcessor()
   .setBatchSize(500)
-  .setBlockRange({ from: 10000 })
+  .setBlockRange({ from: 1000 })
   .setDataSource({
     chain: CHAIN_NODE,
     archive: 'http://localhost:8888/graphql',
   })
   .addEvmLog(contract.address, {
-    range: { from: 10000},
+    range: { from: 1000},
     filter: [erc721.events["Transfer(address,address,uint256)"].topic],
   })
 
