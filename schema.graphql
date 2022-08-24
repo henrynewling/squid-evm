@@ -29,3 +29,13 @@ type Transfer @entity {
   block: Int!
   transactionHash: String!
 }
+
+type Approval @entity {
+  id: ID!
+  token: Token!
+  owner: Owner
+  approved: Owner
+  timestamp: BigInt!
+  block: Int!
+  transactionHash: String!
+}

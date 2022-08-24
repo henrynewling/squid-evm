@@ -1,5 +1,5 @@
-module.exports = class Data1661164689485 {
-  name = 'Data1661164689485'
+module.exports = class Data1661341914517 {
+  name = 'Data1661341914517'
 
   async up(db) {
     await db.query(`CREATE TABLE "owner" ("id" character varying NOT NULL, "balance" numeric, CONSTRAINT "PK_8e86b6b9f94aece7d12d465dc0c" PRIMARY KEY ("id"))`)
@@ -11,11 +11,18 @@ module.exports = class Data1661164689485 {
     await db.query(`CREATE TABLE "token" ("id" character varying NOT NULL, "uri" text, "owner_id" character varying, "contract_id" character varying, CONSTRAINT "PK_82fae97f905930df5d62a702fc9" PRIMARY KEY ("id"))`)
     await db.query(`CREATE INDEX "IDX_77fa31a311c711698a0b944382" ON "token" ("owner_id") `)
     await db.query(`CREATE INDEX "IDX_5c85dbbd108d915a13f71de39a" ON "token" ("contract_id") `)
+    await db.query(`CREATE TABLE "approval" ("id" character varying NOT NULL, "timestamp" numeric NOT NULL, "block" integer NOT NULL, "transaction_hash" text NOT NULL, "token_id" character varying NOT NULL, "owner_id" character varying, "approved_id" character varying, CONSTRAINT "PK_97bfd1cd9dff3c1302229da6b5c" PRIMARY KEY ("id"))`)
+    await db.query(`CREATE INDEX "IDX_fc8dacf9803e61fd3f04ca81b0" ON "approval" ("token_id") `)
+    await db.query(`CREATE INDEX "IDX_6e26a7374a9bdb24cf8a825e69" ON "approval" ("owner_id") `)
+    await db.query(`CREATE INDEX "IDX_509aa8aef12d1ea05c11a9a5e2" ON "approval" ("approved_id") `)
     await db.query(`ALTER TABLE "transfer" ADD CONSTRAINT "FK_b27b1150b8a7af68424540613c7" FOREIGN KEY ("token_id") REFERENCES "token"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`)
     await db.query(`ALTER TABLE "transfer" ADD CONSTRAINT "FK_76bdfed1a7eb27c6d8ecbb73496" FOREIGN KEY ("from_id") REFERENCES "owner"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`)
     await db.query(`ALTER TABLE "transfer" ADD CONSTRAINT "FK_0751309c66e97eac9ef11493623" FOREIGN KEY ("to_id") REFERENCES "owner"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`)
     await db.query(`ALTER TABLE "token" ADD CONSTRAINT "FK_77fa31a311c711698a0b9443823" FOREIGN KEY ("owner_id") REFERENCES "owner"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`)
     await db.query(`ALTER TABLE "token" ADD CONSTRAINT "FK_5c85dbbd108d915a13f71de39ad" FOREIGN KEY ("contract_id") REFERENCES "contract"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`)
+    await db.query(`ALTER TABLE "approval" ADD CONSTRAINT "FK_fc8dacf9803e61fd3f04ca81b08" FOREIGN KEY ("token_id") REFERENCES "token"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`)
+    await db.query(`ALTER TABLE "approval" ADD CONSTRAINT "FK_6e26a7374a9bdb24cf8a825e698" FOREIGN KEY ("owner_id") REFERENCES "owner"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`)
+    await db.query(`ALTER TABLE "approval" ADD CONSTRAINT "FK_509aa8aef12d1ea05c11a9a5e29" FOREIGN KEY ("approved_id") REFERENCES "owner"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`)
   }
 
   async down(db) {
@@ -28,10 +35,17 @@ module.exports = class Data1661164689485 {
     await db.query(`DROP TABLE "token"`)
     await db.query(`DROP INDEX "public"."IDX_77fa31a311c711698a0b944382"`)
     await db.query(`DROP INDEX "public"."IDX_5c85dbbd108d915a13f71de39a"`)
+    await db.query(`DROP TABLE "approval"`)
+    await db.query(`DROP INDEX "public"."IDX_fc8dacf9803e61fd3f04ca81b0"`)
+    await db.query(`DROP INDEX "public"."IDX_6e26a7374a9bdb24cf8a825e69"`)
+    await db.query(`DROP INDEX "public"."IDX_509aa8aef12d1ea05c11a9a5e2"`)
     await db.query(`ALTER TABLE "transfer" DROP CONSTRAINT "FK_b27b1150b8a7af68424540613c7"`)
     await db.query(`ALTER TABLE "transfer" DROP CONSTRAINT "FK_76bdfed1a7eb27c6d8ecbb73496"`)
     await db.query(`ALTER TABLE "transfer" DROP CONSTRAINT "FK_0751309c66e97eac9ef11493623"`)
     await db.query(`ALTER TABLE "token" DROP CONSTRAINT "FK_77fa31a311c711698a0b9443823"`)
     await db.query(`ALTER TABLE "token" DROP CONSTRAINT "FK_5c85dbbd108d915a13f71de39ad"`)
+    await db.query(`ALTER TABLE "approval" DROP CONSTRAINT "FK_fc8dacf9803e61fd3f04ca81b08"`)
+    await db.query(`ALTER TABLE "approval" DROP CONSTRAINT "FK_6e26a7374a9bdb24cf8a825e698"`)
+    await db.query(`ALTER TABLE "approval" DROP CONSTRAINT "FK_509aa8aef12d1ea05c11a9a5e29"`)
   }
 }

@@ -16,22 +16,40 @@ export const contractMapping: Map<string, ContractInfo> = new Map<
   ContractInfo
 >();
 
-export const contract = new ethers.Contract(
-  "0xe9f81ad2a61dc4696a0844e55afc173a2fd9c5af".toLowerCase(),
+export const arcticTokenContract = new ethers.Contract(
+  "0x822f31039f5809fa9dd9877c4f91a46de71cde63".toLowerCase(),
   erc721.abi,
   new ethers.providers.WebSocketProvider(CHAIN_NODE)
 );
 
-contractMapping.set(contract.address, {
-  ethersContract: contract,
+contractMapping.set(arcticTokenContract.address, {
+  ethersContract: arcticTokenContract,
   contractModel: {
-    id: contract.address,
-    name: "MyToken",
-    symbol: "MTK",
-    totalSupply: 1n,
+    id: arcticTokenContract.address,
+    name: "ArcticToken",
+    symbol: "ARTK",
+    totalSupply: 3n,
     mintedTokens: [],
   },
 });
+
+export const myTokenContract = new ethers.Contract(
+  "0x581522ca7b73935e4ad8c165d5635f5e15a7658d".toLowerCase(),
+  erc721.abi,
+  new ethers.providers.WebSocketProvider(CHAIN_NODE)
+);
+
+contractMapping.set(myTokenContract.address, {
+  ethersContract: myTokenContract,
+  contractModel: {
+    id: myTokenContract.address,
+    name: "MyToken",
+    symbol: "MTK",
+    totalSupply: 0n,
+    mintedTokens: [],
+  },
+});
+
 
 
 export function createContractEntity(address: string): Contract {
